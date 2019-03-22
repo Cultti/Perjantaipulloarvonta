@@ -7,19 +7,19 @@ class Settings extends Component {
         var value = event.target.value;
         var index = event.target.name
 
-        this.props.handleNameChange(index, value);
+        this.props.nameChange(index, value);
     }
 
     handleDecreaseHealth = (event) => {
-        this.props.handleHealthChange(event.target.name, -1);
+        this.props.healthChange(event.target.name, -1);
     }
 
     handleIncreaseHealth = (event) => {
-        this.props.handleHealthChange(event.target.name, 1);
+        this.props.healthChange(event.target.name, 1);
     }
 
     handleDelete = (event) => {
-        this.props.handleDeleteName(event.target.name);
+        this.props.deleteName(event.target.name);
     }
 
     render() {

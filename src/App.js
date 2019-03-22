@@ -6,7 +6,7 @@ import * as uuid from 'uuid';
 
 class App extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.carousel = React.createRef();
         this.carouselInterval = 0;
@@ -133,10 +133,10 @@ class App extends Component {
                     onOk={this.closeSettings}
                     onCancel={this.closeSettings}
                     names={this.state.names}
-                    handleNameChange={this.handleNameChange}
-                    handleHealthChange={this.handleHealthChange}
-                    handleAddNewName={this.handleAddNewName}
-                    handleDeleteName={this.handleDeleteName}
+                    nameChange={this.handleNameChange}
+                    healthChange={this.handleHealthChange}
+                    addNewName={this.handleAddNewName}
+                    deleteName={this.handleDeleteName}
                 />
 
                 <Button onClick={this.start} disabled={this.state.running}>
