@@ -58,8 +58,6 @@ class App extends Component {
                 names[index] = selected;
             }
 
-            console.log(names);
-
             this.setState({
                 names,
             });
