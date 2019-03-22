@@ -9,7 +9,7 @@ class CarouselComponent extends Component {
         this.carousel = React.createRef();
     }
 
-    handleSlideChange = (oldIndex, newIndex) => {
+    handleSlideChange = (newIndex) => {
         this.props.slideChange(newIndex);
     }
 
@@ -18,14 +18,21 @@ class CarouselComponent extends Component {
     }
 
     render() {
+        let classes = this.props.names.length === 1 ? 'slider winner' : 'slider';
         return (
             <Carousel
+                className={classes}
                 ref={node => (this.carousel = node)}
                 dots={false}
-                beforeChange={this.handleSlideChange}>
+                afterChange={this.handleSlideChange}>
                 {
                     this.props.names.map((name, i) => {
-                        return (<Slide {...name} />)
+                        let classes = '';
+                        if (name.health === name.deaths) {
+                            classes = 'death';
+                        }
+
+                        return (<Slide {...name} targetKey={name.key} className={classes} />)
                     })
                 }
             </Carousel>

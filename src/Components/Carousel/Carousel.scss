@@ -1,5 +1,18 @@
-.slick-slide {
+.slider {
     background-color: #001A70;
+
+    &.winner {
+        background-color: #22e222;
+        animation: winner 1s 0s;
+        @keyframes winner {
+            0% {
+                background-color: #001A70;
+            }
+            100% {
+                background-color: #22e222;
+            }
+        }
+    }
 
     div {
         height: 300px;
@@ -13,6 +26,23 @@
         margin-bottom: 0;
         padding: 0;
         user-select: none;
+    }
+
+    .death {
+        opacity: 0;
+        animation: death 2s 0s;
+
+        @keyframes death {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
     }
 
     .health-bar {
@@ -36,7 +66,6 @@
 
         @keyframes die {
             0% {
-                // color: #eb2f96;
                 opacity: 1;
                 transform: scale(1.0);
             }
