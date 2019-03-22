@@ -40,16 +40,19 @@
                 opacity: 1;
                 transform: scale(1.0);
             }
-            25% {
+            15% {
                 transform: scale(1.1);
+            }
+            30% {
+                transform: scale(1.0);
             }
             50% {
                 color: red;
-                transform: scale(1.0);
+                transform: scale(1.1);
             }
             75% {
                 opacity: 1;
-                transform: scale(1.1);
+                transform: scale(1.0);
             }
             100% {
                 color: red;
