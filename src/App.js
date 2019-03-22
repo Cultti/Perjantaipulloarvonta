@@ -16,9 +16,9 @@ class App extends Component {
             settingsVisible: false,
             currentSlide: 0,
             names: [
-                { name: 'Pelaaja 1', health: 1, key: uuid.v1() },
-                { name: 'Pelaaja 2', health: 1, key: uuid.v1() },
-                { name: 'Pelaaja 3', health: 1, key: uuid.v1() },
+                { name: 'Pelaaja 1', health: 3, deaths: 0, key: uuid.v1() },
+                { name: 'Pelaaja 2', health: 4, deaths: 0, key: uuid.v1() },
+                { name: 'Pelaaja 3', health: 5, deaths: 0, key: uuid.v1() },
             ],
         }
     }
@@ -49,10 +49,10 @@ class App extends Component {
             let names = this.state.names;
             var selected = names[index];
 
-            selected.health--;
+            selected.deaths++;
 
 
-            if (selected.health === 0) {
+            if (selected.health === selected.deaths) {
                 names.splice(index, 1);
             } else {
                 names[index] = selected;
@@ -87,7 +87,7 @@ class App extends Component {
 
     handleAddNewName = () => {
         let names = this.state.names;
-        names.push({ name: '', health: 1, key: uuid.v1() });
+        names.push({ name: '', health: 1, deaths: 0, key: uuid.v1() });
         this.setState({
             names,
         });

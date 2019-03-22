@@ -7,7 +7,14 @@ class Slide extends Component {
         var healths = [];
 
         for(var i = 0; i < this.props.health; i++) {
-            healths.push(<Icon key={i} type="heart" theme="filled" />)
+            let classes = "health-icon";
+            if (this.props.health - i <= this.props.deaths) {
+                classes = "die health-icon"
+            }
+
+            console.log(this.props.health - i + " " + this.props.deaths);
+
+            healths.push(<Icon key={i} type="heart" theme="filled" className={classes}/>)
         }
 
         return (
