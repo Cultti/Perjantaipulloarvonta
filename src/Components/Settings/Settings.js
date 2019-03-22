@@ -30,7 +30,7 @@ class Settings extends Component {
                 onOk={this.props.onOk}
                 onCancel={this.props.onCancel}
                 footer={[
-                    <Button key="add" icon="plus-circle" onClick={this.props.handleAddNewName}/>,
+                    <Button key="add" icon="plus-circle" onClick={this.props.addNewName}/>,
                     <Button key="close" onClick={this.props.onOk}>Close</Button>
                 ]}>
 
