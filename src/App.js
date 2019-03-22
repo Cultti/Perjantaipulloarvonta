@@ -44,22 +44,22 @@ class App extends Component {
     kill = () => {
         this.stop();
 
-        let index = this.state.currentSlide;
-        let names = this.state.names;
-        var selected = names[index];
-
-        selected.health--;
-
-
-        if (selected.health === 0) {
-            names.splice(index, 1);
-        } else {
-            names[index] = selected;
-        }
-
-        console.log(names);
-
         setTimeout(() => {
+            let index = this.state.currentSlide;
+            let names = this.state.names;
+            var selected = names[index];
+
+            selected.health--;
+
+
+            if (selected.health === 0) {
+                names.splice(index, 1);
+            } else {
+                names[index] = selected;
+            }
+
+            console.log(names);
+
             this.setState({
                 names,
             });
