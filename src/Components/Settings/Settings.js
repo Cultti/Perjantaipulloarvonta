@@ -4,8 +4,8 @@ import NameInput from './NameInput';
 
 class Settings extends Component {
     handleInputChange = (event) => {
-        var value = event.target.value;
-        var index = event.target.name
+        let value = event.target.value;
+        let index = event.target.name
 
         this.props.nameChange(index, value);
     }

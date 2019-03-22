@@ -24,7 +24,7 @@ class App extends Component {
     }
 
     start = () => {
-        var length = this.state.names.length * 5 * 300 * Math.random() + this.state.names.length * 2 * 300;
+        let length = this.state.names.length * 5 * 300 * Math.random() + this.state.names.length * 2 * 300;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide()
@@ -47,7 +47,7 @@ class App extends Component {
         setTimeout(() => {
             let index = this.state.currentSlide;
             let names = this.state.names;
-            var selected = names[index];
+            let selected = names[index];
 
             selected.health--;
 
@@ -102,7 +102,7 @@ class App extends Component {
     }
 
     handleNameChange = (index, name) => {
-        var names = this.state.names;
+        let names = this.state.names;
         names[index].name = name;
         this.setState({
             names,
@@ -110,7 +110,7 @@ class App extends Component {
     }
 
     handleHealthChange = (index, value) => {
-        var names = this.state.names;
+        let names = this.state.names;
         names[index].health = names[index].health + value;
         this.setState({
             names,

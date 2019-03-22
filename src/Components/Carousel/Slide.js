@@ -4,9 +4,9 @@ import { Icon } from 'antd';
 class Slide extends Component {
     render() {
 
-        var healths = [];
+        let healths = [];
 
-        for(var i = 0; i < this.props.health; i++) {
+        for(let i = 0; i < this.props.health; i++) {
             healths.push(<Icon key={i} type="heart" theme="filled" />)
         }
 
