@@ -16,18 +16,22 @@ class App extends Component {
             settingsVisible: false,
             currentSlide: 0,
             names: [
-                { name: 'Pelaaja 1', health: 1, key: uuid.v1() },
-                { name: 'Pelaaja 2', health: 1, key: uuid.v1() },
-                { name: 'Pelaaja 3', health: 1, key: uuid.v1() },
+                { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
+                { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
+                { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
             ],
         }
     }
 
     start = () => {
-        let length = this.state.names.length * 5 * 300 * Math.random() + this.state.names.length * 2 * 300;
+        if (this.state.names.length === 1) {
+            return;
+        }
+
+        var length = this.state.names.length * 5 * 300 * Math.random() + this.state.names.length * 2 * 300;
 
         this.carouselInterval = setInterval(() => {
-            this.carousel.nextSlide()
+            this.carousel.nextSlide();
         });
 
         this.setState({
@@ -49,23 +53,30 @@ class App extends Component {
             let names = this.state.names;
             let selected = names[index];
 
-            selected.health--;
-
-
-            if (selected.health === 0) {
-                names.splice(index, 1);
-            } else {
-                names[index] = selected;
-            }
+            selected.deaths++;
 
             this.setState({
                 names,
             });
-            this.setState({
-                running: false,
-            });
-        }, 2000);
+
+            setTimeout(() => {
+                this.carousel.nextSlide();
+                setTimeout(() => {
+                    let cleanNames = this.cleanNames();
+                    if (cleanNames.length > 1) {
+                        this.start();
+                    } else {
+                        this.setState({
+                            names: this.cleanNames(),
+                        });
+                    }
+                }, 1000);
+            }, 2000);
+
+        }, 1000);
     }
+
+    cleanNames = () => this.state.names.filter(name => name.health !== name.deaths);
 
     openSettings = () => {
         this.setState({
@@ -83,11 +94,17 @@ class App extends Component {
         this.setState({
             currentSlide: newSlide
         });
+
+        if (newSlide === 0) {
+            this.setState({
+                names: this.cleanNames(),
+            });
+        }
     }
 
     handleAddNewName = () => {
         let names = this.state.names;
-        names.push({ name: '', health: 1, key: uuid.v1() });
+        names.push({ name: '', health: 1, deaths: 0, key: uuid.v1() });
         this.setState({
             names,
         });

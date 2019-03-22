@@ -1,5 +1,18 @@
-.slick-slide {
+.slider {
     background-color: #001A70;
+
+    &.winner {
+        background-color: #22e222;
+        animation: winner 1s 0s;
+        @keyframes winner {
+            0% {
+                background-color: #001A70;
+            }
+            100% {
+                background-color: #22e222;
+            }
+        }
+    }
 
     div {
         height: 300px;
@@ -15,14 +28,66 @@
         user-select: none;
     }
 
+    .death {
+        opacity: 0;
+        animation: death 2s 0s;
+
+        @keyframes death {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+    }
+
     .health-bar {
         text-align: center;
     }
 
-    i {
+    .health-icon {
         font-size: 40px;
         color: #eb2f96;
         margin-left: 5px;
-        text-shadow: 0 0 1px #000000;
+
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -o-transition: 0.5s;
+        transition: 0.5s;
+
+        &.die {
+            animation: die 1s 0s;
+            opacity: 0;
+        }
+
+        @keyframes die {
+            0% {
+                opacity: 1;
+                transform: scale(1.0);
+            }
+            15% {
+                transform: scale(1.1);
+            }
+            30% {
+                transform: scale(1.0);
+            }
+            50% {
+                color: red;
+                transform: scale(1.1);
+            }
+            75% {
+                opacity: 1;
+                transform: scale(1.0);
+            }
+            100% {
+                color: red;
+                opacity: 0;
+                transform: scale(1.0)
+            }
+        }
     }
 }
