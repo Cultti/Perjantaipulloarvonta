@@ -25,7 +25,7 @@ class CarouselComponent extends Component {
                 beforeChange={this.handleSlideChange}>
                 {
                     this.props.names.map((name, i) => {
-                        return (<Slide key={i} {...name} />)
+                        return (<Slide {...name} />)
                     })
                 }
             </Carousel>

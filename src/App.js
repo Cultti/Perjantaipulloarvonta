@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { Carousel, Header, Settings } from './Components';
 import { Button } from 'antd/lib/radio';
+import * as uuid from 'uuid';
 
 class App extends Component {
     constructor(props) {
@@ -15,9 +16,9 @@ class App extends Component {
             settingsVisible: false,
             currentSlide: 0,
             names: [
-                { name: 'Timo', health: 2 },
-                { name: 'Heikki', health: 1 },
-                { name: 'Antti', health: 4 },
+                { name: 'Pelaaja 1', health: 1, key: uuid.v1() },
+                { name: 'Pelaaja 2', health: 1, key: uuid.v1() },
+                { name: 'Pelaaja 3', health: 1, key: uuid.v1() },
             ],
         }
     }
@@ -88,7 +89,7 @@ class App extends Component {
 
     handleAddNewName = () => {
         let names = this.state.names;
-        names.push({ name: '', health: 1 });
+        names.push({ name: '', health: 1, key: uuid.v1() });
         this.setState({
             names,
         });

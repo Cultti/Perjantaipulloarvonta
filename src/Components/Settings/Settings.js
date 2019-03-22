@@ -37,7 +37,6 @@ class Settings extends Component {
                 {this.props.names.map((name, i) => {
                     return (
                         <NameInput
-                            key={i}
                             targetKey={i}
                             onChange={this.handleInputChange}
                             decreaseHealth={this.handleDecreaseHealth}
