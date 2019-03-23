@@ -52,6 +52,8 @@ IF NOT DEFINED KUDU_SYNC_CMD (
   SET KUDU_SYNC_CMD=%appdata%\npm\kuduSync.cmd
 )
 
+goto Deployment
+
 :: Utility Functions
 :: -----------------
 
@@ -82,6 +84,8 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
   SET NODE_EXE=node
 )
 
+goto :EOF
+
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: Deployment
 :: ----------
@@ -89,23 +93,32 @@ IF DEFINED KUDU_SELECT_NODE_VERSION_CMD (
 :Deployment
 echo Handling node.js deployment.
 
-:: 1. Install npm packages
+:: 1. Select node version
+echo Selecting node version
+call :SelectNodeVersion
+echo Node version select done
+
+:: 2. Install npm packages
+echo Installing npm packages
 pushd "%DEPLOYMENT_SOURCE%"
 call :ExecuteCmd !NPM_CMD! install
 IF !ERRORLEVEL! NEQ 0 goto error
-popd
+echo npm packages installed
 
-:: 2. Build
-pushd "%DEPLOYMENT_SOURCE%"
+:: 3. Build
+echo Building application
 call :ExecuteCmd !NPM_CMD! run build --production
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
+echo Build done
 
-:: 3. KuduSync
+:: 4. KuduSync
+echo Syncing build
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
   call :ExecuteCmd "%KUDU_SYNC_CMD%" -v 50 -f "%DEPLOYMENT_BUILD%" -t "%DEPLOYMENT_TARGET%" -n "%NEXT_MANIFEST_PATH%" -p "%PREVIOUS_MANIFEST_PATH%" -i ".git;.hg;.deployment;deploy.cmd"
   IF !ERRORLEVEL! NEQ 0 goto error
 )
+echo Sync done
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
