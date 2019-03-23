@@ -107,7 +107,7 @@ echo npm packages installed
 
 :: 3. Build
 echo Building application
-call :ExecuteCmd !NPM_CMD! run build --production
+call :ExecuteCmd !NPM_CMD! run build
 IF !ERRORLEVEL! NEQ 0 goto error
 popd
 echo Build done
