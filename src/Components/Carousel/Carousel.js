@@ -18,7 +18,7 @@ class CarouselComponent extends Component {
     }
 
     render() {
-        let classes = this.props.names.length === 1 ? 'slider winner' : 'slider';
+        let classes = this.props.players.length === 1 ? 'slider winner' : 'slider';
         return (
             <Carousel
                 className={classes}
@@ -26,13 +26,13 @@ class CarouselComponent extends Component {
                 dots={false}
                 afterChange={this.handleSlideChange}>
                 {
-                    this.props.names.map((name, i) => {
+                    this.props.players.map((player, i) => {
                         let classes = '';
-                        if (name.health === name.deaths) {
+                        if (player.health === player.deaths) {
                             classes = 'death';
                         }
 
-                        return (<Slide {...name} targetKey={name.key} className={classes} />)
+                        return (<Slide {...player} targetKey={player.key} className={classes} />)
                     })
                 }
             </Carousel>

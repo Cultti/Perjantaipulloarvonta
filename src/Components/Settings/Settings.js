@@ -7,19 +7,19 @@ class Settings extends Component {
         let value = event.target.value;
         let index = event.target.name
 
-        this.props.nameChange(index, value);
+        this.props.playerNameChange(index, value);
     }
 
     handleDecreaseHealth = (event) => {
-        this.props.healthChange(event.target.name, -1);
+        this.props.playerHealthChange(event.target.name, -1);
     }
 
     handleIncreaseHealth = (event) => {
-        this.props.healthChange(event.target.name, 1);
+        this.props.playerHealthChange(event.target.name, 1);
     }
 
     handleDelete = (event) => {
-        this.props.deleteName(event.target.name);
+        this.props.deletePlayer(event.target.name);
     }
 
     render() {
@@ -30,11 +30,11 @@ class Settings extends Component {
                 onOk={this.props.onOk}
                 onCancel={this.props.onCancel}
                 footer={[
-                    <Button key="add" icon="plus-circle" onClick={this.props.addNewName}/>,
+                    <Button key="add" icon="plus-circle" onClick={this.props.addNewPlayer}/>,
                     <Button key="close" onClick={this.props.onOk}>Close</Button>
                 ]}>
 
-                {this.props.names.map((name, i) => {
+                {this.props.players.map((player, i) => {
                     return (
                         <NameInput
                             targetKey={i}
@@ -42,7 +42,7 @@ class Settings extends Component {
                             decreaseHealth={this.handleDecreaseHealth}
                             increaseHealth={this.handleIncreaseHealth}
                             delete={this.handleDelete}
-                            {...name}
+                            {...player}
                         />
                     );
                 })}
