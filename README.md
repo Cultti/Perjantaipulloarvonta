@@ -1,3 +1,4 @@
+[![Build status](https://cultti.visualstudio.com/Perjantaipulloarvonta/_apis/build/status/perjantaipulloarvonta%20-%201%20-%20CI)](https://cultti.visualstudio.com/Perjantaipulloarvonta/_build/latest?definitionId=1)
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -30,9 +31,3 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 ## Contributing
 
 This project uses git flow to manage branches. *Please create pull requests against develop branch only.*
-
-## License
-MIT
-
-## Contributors
-[<img alt="Cultti" src="https://avatars0.githubusercontent.com/u/5057683?v=4&s=117" width="117">](https://github.com/Cultti)
