@@ -15,7 +15,7 @@ class App extends Component {
             running: false,
             settingsVisible: false,
             currentSlide: 0,
-            names: [
+            players: [
                 { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
                 { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
                 { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
@@ -24,11 +24,11 @@ class App extends Component {
     }
 
     start = () => {
-        if (this.state.names.length === 1) {
+        if (this.state.players.length === 1) {
             return;
         }
 
-        var length = this.state.names.length * 5 * 300 * Math.random() + this.state.names.length * 2 * 300;
+        var length = this.state.players.length * 5 * 300 * Math.random() + this.state.players.length * 2 * 300;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
@@ -50,24 +50,24 @@ class App extends Component {
 
         setTimeout(() => {
             let index = this.state.currentSlide;
-            let names = this.state.names;
-            let selected = names[index];
+            let players = this.state.players;
+            let selected = players[index];
 
             selected.deaths++;
 
             this.setState({
-                names,
+                players: players,
             });
 
             setTimeout(() => {
                 this.carousel.nextSlide();
                 setTimeout(() => {
-                    let cleanNames = this.cleanNames();
-                    if (cleanNames.length > 1) {
+                    let cleanPlayers = this.cleanPlayers();
+                    if (cleanPlayers.length > 1) {
                         this.start();
                     } else {
                         this.setState({
-                            names: this.cleanNames(),
+                            players: this.cleanPlayers(),
                         });
                     }
                 }, 1000);
@@ -76,7 +76,7 @@ class App extends Component {
         }, 1000);
     }
 
-    cleanNames = () => this.state.names.filter(name => name.health !== name.deaths);
+    cleanPlayers = () => this.state.players.filter(player => player.health !== player.deaths);
 
     openSettings = () => {
         this.setState({
@@ -97,40 +97,40 @@ class App extends Component {
 
         if (newSlide === 0) {
             this.setState({
-                names: this.cleanNames(),
+                players: this.cleanPlayers(),
             });
         }
     }
 
-    handleAddNewName = () => {
-        let names = this.state.names;
-        names.push({ name: '', health: 1, deaths: 0, key: uuid.v1() });
+    handleAddNewPlayer = () => {
+        let players = this.state.players;
+        players.push({ name: '', health: 1, deaths: 0, key: uuid.v1() });
         this.setState({
-            names,
+            players: players,
         });
     }
 
-    handleDeleteName = (index) => {
-        let names = this.state.names;
-        names.splice(index, 1);
+    handleDeletePlayer = (index) => {
+        let players = this.state.players;
+        players.splice(index, 1);
         this.setState({
-            names,
+            players: players,
         });
     }
 
-    handleNameChange = (index, name) => {
-        let names = this.state.names;
-        names[index].name = name;
+    handlePlayerNameChange = (index, name) => {
+        let players = this.state.players;
+        players[index].name = name;
         this.setState({
-            names,
+            players: players,
         });
     }
 
-    handleHealthChange = (index, value) => {
-        let names = this.state.names;
-        names[index].health = names[index].health + value;
+    handlePlayerHealthChange = (index, value) => {
+        let players = this.state.players;
+        players[index].health = players[index].health + value;
         this.setState({
-            names,
+            players: players,
         });
     }
 
@@ -142,18 +142,18 @@ class App extends Component {
                 />
                 <Carousel
                     ref={node => (this.carousel = node)}
-                    names={this.state.names}
+                    players={this.state.players}
                     slideChange={this.handleSlideChange}
                 />
                 <Settings
                     visible={this.state.settingsVisible}
                     onOk={this.closeSettings}
                     onCancel={this.closeSettings}
-                    names={this.state.names}
-                    nameChange={this.handleNameChange}
-                    healthChange={this.handleHealthChange}
-                    addNewName={this.handleAddNewName}
-                    deleteName={this.handleDeleteName}
+                    players={this.state.players}
+                    playerNameChange={this.handlePlayerNameChange}
+                    playerHealthChange={this.handlePlayerHealthChange}
+                    addNewPlayer={this.handleAddNewPlayer}
+                    deletePlayer={this.handleDeletePlayer}
                 />
 
                 <Button onClick={this.start} disabled={this.state.running}>
