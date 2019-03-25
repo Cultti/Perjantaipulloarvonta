@@ -1,0 +1,20 @@
+.player-item {
+    width: 100%;
+    
+    .stroke {
+        text-decoration: line-through;
+    }
+
+    .health-container {
+        float: right;
+    }
+    
+    .health-icon {
+        color: #eb2f96;
+        margin-left: 5px;
+
+        &.die {
+            color: black;
+        }
+    }
+}
