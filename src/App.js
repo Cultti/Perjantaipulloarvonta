@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Carousel, Header, Log, Settings } from './Components';
+import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button } from 'antd/lib/radio';
 import { Row, Col } from 'antd';
 import * as uuid from 'uuid';
@@ -21,6 +21,7 @@ class App extends Component {
                 { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
                 { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
             ],
+            deadPlayers: [],
             log: [],
         }
     }
@@ -59,10 +60,15 @@ class App extends Component {
 
             let log = this.state.log;
             log.push({ log: player.name + " lost a life. Lives: " + player.health + ", deaths: " + player.deaths, key: uuid.v1() });
+            let deadPlayers = this.state.deadPlayers;
+            if (player.health === player.deaths) {
+                deadPlayers.push(player);
+            }
 
             this.setState({
                 players,
                 log,
+                deadPlayers,
             });
 
             setTimeout(() => {
@@ -144,6 +150,7 @@ class App extends Component {
     }
 
     render() {
+        let log = JSON.parse(JSON.stringify(this.state.log));
         return (
             <div className="App">
                 <Header
@@ -171,10 +178,12 @@ class App extends Component {
                 <div className="bottom-info">
                     <Row gutter={10}>
                         <Col span={12}>
-                            <Log log={this.state.log} />
+                            <Log log={log} />
                         </Col>
                         <Col span={12}>
-                            {/* Place holder for player and lives list */}
+                            <Players
+                                players={this.state.players}
+                                deadPlayers={this.state.deadPlayers} />
                         </Col>
                     </Row>
                 </div>
