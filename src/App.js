@@ -6,24 +6,36 @@ import { Row, Col } from 'antd';
 import * as uuid from 'uuid';
 
 class App extends Component {
+    players = [
+        { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
+        { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
+        { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
+    ];
+
     constructor(props) {
         super(props);
 
         this.carousel = React.createRef();
         this.carouselInterval = 0;
 
-        this.state = {
-            running: false,
-            settingsVisible: false,
-            currentSlide: 0,
-            players: [
-                { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
-                { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
-                { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
-            ],
-            deadPlayers: [],
-            log: [],
-        }
+        var players = this.getPlayers();
+
+        this.state = this.getDefaultState();
+    }
+
+    getDefaultState = () => ({
+        running: false,
+        settingsVisible: false,
+        currentSlide: 0,
+        players: this.getPlayers(),
+        deadPlayers: [],
+        log: [],
+    });
+
+    getPlayers = () => window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
+
+    reset = () => {
+        this.setState(this.getDefaultState());
     }
 
     start = () => {
@@ -32,6 +44,8 @@ class App extends Component {
         }
 
         var length = this.state.players.length * 5 * 300 * Math.random() + this.state.players.length * 2 * 300;
+
+        console.log(length);
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
@@ -93,6 +107,8 @@ class App extends Component {
 
     cleanPlayers = () => this.state.players.filter(player => player.health !== player.deaths);
 
+    savePlayers = () => window.localStorage['players'] = JSON.stringify(this.state.players);
+
     openSettings = () => {
         this.setState({
             settingsVisible: true,
@@ -103,6 +119,7 @@ class App extends Component {
         this.setState({
             settingsVisible: false,
         });
+        this.savePlayers();
     }
 
     handleSlideChange = (newSlide) => {
@@ -174,6 +191,9 @@ class App extends Component {
 
                 <Button onClick={this.start} disabled={this.state.running}>
                     Start
+                </Button>
+                <Button onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1}>
+                    Reset
                 </Button>
                 <div className="bottom-info">
                     <Row gutter={10}>
