@@ -90,9 +90,9 @@ class App extends Component {
                         this.start();
                     } else {
                         let log = this.state.log;
-                        log.push({ log: this.state.players[0].name + " won!", key: uuid.v1() });
+                        log.push({ log: cleanPlayers[0].name + " won!", key: uuid.v1() });
                         this.setState({
-                            players: this.cleanPlayers(),
+                            players: cleanPlayers,
                             log,
                         });
                     }
