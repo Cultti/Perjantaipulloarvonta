@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
-import { Button } from 'antd/lib/radio';
-import { Row, Col } from 'antd';
+import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
 
 class App extends Component {
@@ -188,13 +187,14 @@ class App extends Component {
                     addNewPlayer={this.handleAddNewPlayer}
                     deletePlayer={this.handleDeletePlayer}
                 />
-
-                <Button onClick={this.start} disabled={this.state.running}>
-                    Start
-                </Button>
-                <Button onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1}>
-                    Reset
-                </Button>
+                <div className="button-group">
+                    <Button className="button" onClick={this.start} disabled={this.state.running} size="large" type="primary">
+                        Start
+                    </Button>
+                    <Button className="button" onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1} size="large" type="danger">
+                        Reset
+                    </Button>
+                </div>
                 <div className="bottom-info">
                     <Row gutter={10}>
                         <Col span={12}>
