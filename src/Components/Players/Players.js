@@ -15,7 +15,7 @@ class Players extends Component {
             }
             allPlayers = players
                 .concat(this.props.deadPlayers)
-                .sort((a, b) => a.name === b.name ? 0 : a.name < b.name ? -1 : 1);
+                .sort((a, b) => a.name === b.name ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1);
         }
 
         return (
