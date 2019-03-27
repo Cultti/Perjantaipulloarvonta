@@ -20,7 +20,7 @@ class Players extends Component {
 
         return (
             <List
-                header={<div>Players</div>}
+                header={<div>Players - Alive {this.props.players.length}/{allPlayers.length}</div>}
                 bordered
                 dataSource={allPlayers.reverse()}
                 rowKey={player => player.key}
