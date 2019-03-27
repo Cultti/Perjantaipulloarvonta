@@ -1,29 +1,40 @@
 import React, { Component } from 'react';
-import './App.css';
+import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
-import { Button } from 'antd/lib/radio';
-import { Row, Col } from 'antd';
+import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
 
 class App extends Component {
+    players = [
+        { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
+        { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
+        { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
+    ];
+
     constructor(props) {
         super(props);
 
         this.carousel = React.createRef();
         this.carouselInterval = 0;
 
-        this.state = {
-            running: false,
-            settingsVisible: false,
-            currentSlide: 0,
-            players: [
-                { name: 'Pelaaja 1', health: 1, deaths: 0, key: uuid.v1() },
-                { name: 'Pelaaja 2', health: 1, deaths: 0, key: uuid.v1() },
-                { name: 'Pelaaja 3', health: 1, deaths: 0, key: uuid.v1() },
-            ],
-            deadPlayers: [],
-            log: [],
-        }
+        var players = this.getPlayers();
+
+        this.state = this.getDefaultState();
+    }
+
+    getDefaultState = () => ({
+        running: false,
+        settingsVisible: false,
+        currentSlide: 0,
+        players: this.getPlayers(),
+        deadPlayers: [],
+        log: [],
+    });
+
+    getPlayers = () => window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
+
+    reset = () => {
+        this.setState(this.getDefaultState());
     }
 
     start = () => {
@@ -31,11 +42,11 @@ class App extends Component {
             return;
         }
 
-        var length = this.state.players.length * 5 * 300 * Math.random() + this.state.players.length * 2 * 300;
+        var length = Math.floor((Math.random() * Number.MAX_SAFE_INTEGER)) % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
-        });
+        }, 300);
 
         this.setState({
             running: true,
@@ -79,9 +90,9 @@ class App extends Component {
                         this.start();
                     } else {
                         let log = this.state.log;
-                        log.push({ log: this.state.players[0].name + " won!", key: uuid.v1() });
+                        log.push({ log: cleanPlayers[0].name + " won!", key: uuid.v1() });
                         this.setState({
-                            players: this.cleanPlayers(),
+                            players: cleanPlayers,
                             log,
                         });
                     }
@@ -93,6 +104,8 @@ class App extends Component {
 
     cleanPlayers = () => this.state.players.filter(player => player.health !== player.deaths);
 
+    savePlayers = () => window.localStorage['players'] = JSON.stringify(this.state.players);
+
     openSettings = () => {
         this.setState({
             settingsVisible: true,
@@ -103,6 +116,7 @@ class App extends Component {
         this.setState({
             settingsVisible: false,
         });
+        this.savePlayers();
     }
 
     handleSlideChange = (newSlide) => {
@@ -171,10 +185,14 @@ class App extends Component {
                     addNewPlayer={this.handleAddNewPlayer}
                     deletePlayer={this.handleDeletePlayer}
                 />
-
-                <Button onClick={this.start} disabled={this.state.running}>
-                    Start
-                </Button>
+                <div className="button-group">
+                    <Button className="button" onClick={this.start} disabled={this.state.running} size="large" type="primary">
+                        Start
+                    </Button>
+                    <Button className="button" onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1} size="large" type="danger">
+                        Reset
+                    </Button>
+                </div>
                 <div className="bottom-info">
                     <Row gutter={10}>
                         <Col span={12}>

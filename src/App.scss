@@ -1,0 +1,21 @@
+.right {
+    float: right;
+}
+
+.bottom-info {
+    width: 100%;
+    max-width: 969px;
+    margin: auto;
+}
+
+.button-group {
+    margin: auto;
+    margin-bottom: 15px;
+    margin-top: 15px;
+    width: fit-content;
+
+    .button {
+        margin-left: 5px;
+        width: 125px;
+    }
+}
