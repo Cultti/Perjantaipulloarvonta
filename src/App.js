@@ -42,13 +42,11 @@ class App extends Component {
             return;
         }
 
-        var length = this.state.players.length * 5 * 300 * Math.random() + this.state.players.length * 2 * 300;
-
-        console.log(length);
+        var length = Math.floor((Math.random() * Number.MAX_SAFE_INTEGER)) % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
-        });
+        }, 300);
 
         this.setState({
             running: true,
