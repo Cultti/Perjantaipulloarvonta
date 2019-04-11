@@ -42,7 +42,7 @@ class App extends Component {
             return;
         }
 
-        var length = Math.floor((Math.random() * Number.MAX_SAFE_INTEGER)) % this.state.players.length * 300 * 2 + 5000;
+        var length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
@@ -53,6 +53,12 @@ class App extends Component {
         });
 
         setTimeout(this.kill, length);
+    }
+
+    getRandom = () => {
+        var output = new Uint32Array(1);
+        window.crypto.getRandomValues(output);
+        return output[0];
     }
 
     stop = () => {
