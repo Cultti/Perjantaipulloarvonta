@@ -8,7 +8,9 @@
         "react": "^16.8.4",
         "react-appinsights": "^2.0.2",
         "react-dom": "^16.8.4",
+        "react-gh-corner": "^1.1.2",
         "react-scripts": "2.1.8",
+        "styled-components": "^4.2.0",
         "uuid": "^3.3.2"
     },
     "scripts": {

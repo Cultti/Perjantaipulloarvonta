@@ -4,6 +4,7 @@ import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
 import ReactAI from 'react-appinsights';
+import GHCorner from 'react-gh-corner';
 
 class App extends Component {
     players = [
@@ -173,6 +174,14 @@ class App extends Component {
         let log = JSON.parse(JSON.stringify(this.state.log));
         return (
             <div className="App">
+                <GHCorner 
+                    href="https://github.com/Cultti/Perjantaipulloarvonta"
+                    position="top-left"
+                    size={50}
+                    ariaLabel="Fork me on github!"
+                    bgColor="#000000"
+                    openInNewTab={true}
+                />
                 <Header
                     settingsClick={this.openSettings}
                 />
