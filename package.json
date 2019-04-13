@@ -6,6 +6,7 @@
         "antd": "^3.15.0",
         "node-sass": "^4.11.0",
         "react": "^16.8.4",
+        "react-appinsights": "^2.0.2",
         "react-dom": "^16.8.4",
         "react-scripts": "2.1.8",
         "uuid": "^3.3.2"

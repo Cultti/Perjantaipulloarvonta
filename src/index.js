@@ -4,6 +4,15 @@ import 'antd/dist/antd.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import ReactAI from 'react-appinsights';
+
+if (process.env.REACT_APP_INSTRUMENTATION_KEY !== '#{INSTRUMENTATION_KEY}#') {
+    ReactAI.init(
+        {
+            instrumentationKey: process.env.REACT_APP_INSTRUMENTATION_KEY,
+        }
+    );
+}
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

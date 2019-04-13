@@ -3,6 +3,7 @@ import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
+import ReactAI from 'react-appinsights';
 
 class App extends Component {
     players = [
@@ -99,6 +100,7 @@ class App extends Component {
                             players: cleanPlayers,
                             log,
                         });
+                        ReactAI.ai().flush();
                     }
                 }, 1000);
             }, 2000);
@@ -214,4 +216,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default ReactAI.withTracking(App);
