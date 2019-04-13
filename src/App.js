@@ -3,6 +3,8 @@ import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
+import ReactAI from 'react-appinsights';
+import GHCorner from 'react-gh-corner';
 
 class App extends Component {
     players = [
@@ -16,8 +18,6 @@ class App extends Component {
 
         this.carousel = React.createRef();
         this.carouselInterval = 0;
-
-        var players = this.getPlayers();
 
         this.state = this.getDefaultState();
     }
@@ -42,7 +42,7 @@ class App extends Component {
             return;
         }
 
-        var length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
+        let length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
@@ -56,7 +56,7 @@ class App extends Component {
     }
 
     getRandom = () => {
-        var output = new Uint32Array(1);
+        let output = new Uint32Array(1);
         window.crypto.getRandomValues(output);
         return output[0];
     }
@@ -101,6 +101,7 @@ class App extends Component {
                             players: cleanPlayers,
                             log,
                         });
+                        ReactAI.ai().flush();
                     }
                 }, 1000);
             }, 2000);
@@ -173,6 +174,14 @@ class App extends Component {
         let log = JSON.parse(JSON.stringify(this.state.log));
         return (
             <div className="App">
+                <GHCorner 
+                    href="https://github.com/Cultti/Perjantaipulloarvonta"
+                    position="top-left"
+                    size={50}
+                    ariaLabel="Fork me on github!"
+                    bgColor="#000000"
+                    openInNewTab={true}
+                />
                 <Header
                     settingsClick={this.openSettings}
                 />
@@ -216,4 +225,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default ReactAI.withTracking(App);

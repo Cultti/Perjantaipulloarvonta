@@ -5,7 +5,7 @@ class PlayerItem extends Component {
     render() {
         let healths = [];
 
-        for (var i = 0; i < this.props.health; i++) {
+        for (let i = 0; i < this.props.health; i++) {
             let classes = 'health-icon';
             if (this.props.health - i <= this.props.deaths) {
                 classes = 'die health-icon';
