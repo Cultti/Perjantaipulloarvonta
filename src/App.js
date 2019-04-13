@@ -17,8 +17,6 @@ class App extends Component {
         this.carousel = React.createRef();
         this.carouselInterval = 0;
 
-        var players = this.getPlayers();
-
         this.state = this.getDefaultState();
     }
 
@@ -42,7 +40,7 @@ class App extends Component {
             return;
         }
 
-        var length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
+        let length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
             this.carousel.nextSlide();
@@ -56,7 +54,7 @@ class App extends Component {
     }
 
     getRandom = () => {
-        var output = new Uint32Array(1);
+        let output = new Uint32Array(1);
         window.crypto.getRandomValues(output);
         return output[0];
     }
