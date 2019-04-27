@@ -70,7 +70,9 @@ class App extends Component {
         let length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
+            if (this.getRandom() % 100 > 5) {
             this.carousel.nextSlide();
+            }
         }, 300);
 
         this.setState({
