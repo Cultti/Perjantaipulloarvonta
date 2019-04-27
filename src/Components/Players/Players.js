@@ -12,7 +12,7 @@ class Players extends Component {
                 bordered
                 dataSource={this.props.players}
                 rowKey={player => player.key}
-                renderItem={player => <List.Item><PlayerItem {...player} /></List.Item>}
+                renderItem={player => <List.Item><PlayerItem targetKey={player.key} {...player} /></List.Item>}
             />
         );
     }
