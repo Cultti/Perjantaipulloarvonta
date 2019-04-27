@@ -28,6 +28,7 @@ class App extends Component {
         currentSlide: 0,
         players: this.getPlayers(),
         alivePlayers: this.getPlayers(),
+        winner: false,
         log: [],
     });
 
@@ -71,7 +72,7 @@ class App extends Component {
 
         this.carouselInterval = setInterval(() => {
             if (this.getRandom() % 100 > 5) {
-            this.carousel.nextSlide();
+                this.carousel.nextSlide();
             }
         }, 300);
 
@@ -120,6 +121,7 @@ class App extends Component {
                         this.setState({
                             log,
                             running: false,
+                            winner: true,
                         });
                         ReactAI.ai().flush();
                     }, 1000)
@@ -210,6 +212,7 @@ class App extends Component {
                 <Carousel
                     ref={node => (this.carousel = node)}
                     players={this.state.alivePlayers}
+                    winner={this.state.winner}
                     slideChange={this.handleSlideChange}
                 />
                 <Settings

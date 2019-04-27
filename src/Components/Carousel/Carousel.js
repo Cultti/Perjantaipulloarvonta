@@ -18,7 +18,7 @@ class CarouselComponent extends Component {
     }
 
     render() {
-        let classes = this.props.players.length === 1 ? 'slider winner' : 'slider';
+        let classes = this.props.winner ? 'slider winner' : 'slider';
         return (
             <Carousel
                 className={classes}
