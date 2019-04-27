@@ -27,18 +27,46 @@ class App extends Component {
         settingsVisible: false,
         currentSlide: 0,
         players: this.getPlayers(),
-        deadPlayers: [],
+        alivePlayers: this.getPlayers(),
         log: [],
     });
 
-    getPlayers = () => window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
+    getPlayers = () => {
+        let players;
+        if (window.localStorage['players']) {
+            players = JSON.parse(window.localStorage['players']);
+        } else {
+            players = this.players;
+        }
+
+        return players.map(player => {
+            return {
+                ...player,
+                deaths: 0,
+            };
+        });
+    }
+
+    getEmptyPlayer = (name) => {
+        return {
+            name,
+            health: 1,
+            deaths: 0,
+            key: uuid.v1(),
+        }
+    }
+    
+    
+    // window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
+
+    getAlivePlayers = () => this.state.players.filter(player => player.health > player.deaths);
 
     reset = () => {
         this.setState(this.getDefaultState());
     }
 
     start = () => {
-        if (this.state.players.length === 1) {
+        if (this.getAlivePlayers().length === 1) {
             return;
         }
 
@@ -77,29 +105,24 @@ class App extends Component {
 
             let log = this.state.log;
             log.push({ log: player.name + " lost a life. Lives: " + player.health + ", deaths: " + player.deaths, key: uuid.v1() });
-            let deadPlayers = this.state.deadPlayers;
-            if (player.health === player.deaths) {
-                deadPlayers.push(player);
-            }
 
             this.setState({
                 players,
                 log,
-                deadPlayers,
             });
 
             setTimeout(() => {
                 this.carousel.nextSlide();
                 setTimeout(() => {
-                    let cleanPlayers = this.cleanPlayers();
-                    if (cleanPlayers.length > 1) {
+                    let alivePlayers = this.getAlivePlayers();
+                    if (alivePlayers.length > 1) {
                         this.start();
                     } else {
                         let log = this.state.log;
-                        log.push({ log: cleanPlayers[0].name + " won!", key: uuid.v1() });
+                        log.push({ log: alivePlayers[0].name + " won!", key: uuid.v1() });
                         this.setState({
-                            players: cleanPlayers,
                             log,
+                            alivePlayers,
                         });
                         ReactAI.ai().flush();
                     }
@@ -108,8 +131,6 @@ class App extends Component {
 
         }, 1000);
     }
-
-    cleanPlayers = () => this.state.players.filter(player => player.health !== player.deaths);
 
     savePlayers = () => window.localStorage['players'] = JSON.stringify(this.state.players);
 
@@ -133,7 +154,7 @@ class App extends Component {
 
         if (newSlide === 0) {
             this.setState({
-                players: this.cleanPlayers(),
+                alivePlayers: this.getAlivePlayers(),
             });
         }
     }
@@ -144,6 +165,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handleDeletePlayer = (index) => {
@@ -152,6 +174,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handlePlayerNameChange = (index, name) => {
@@ -160,6 +183,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handlePlayerHealthChange = (index, value) => {
@@ -168,6 +192,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     render() {
@@ -187,7 +212,7 @@ class App extends Component {
                 />
                 <Carousel
                     ref={node => (this.carousel = node)}
-                    players={this.state.players}
+                    players={this.state.alivePlayers}
                     slideChange={this.handleSlideChange}
                 />
                 <Settings
@@ -204,7 +229,7 @@ class App extends Component {
                     <Button className="button" onClick={this.start} disabled={this.state.running} size="large" type="primary">
                         Start
                     </Button>
-                    <Button className="button" onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1} size="large" type="danger">
+                    <Button className="button" onClick={this.reset} disabled={this.state.running} size="large" type="danger">
                         Reset
                     </Button>
                 </div>
@@ -216,7 +241,7 @@ class App extends Component {
                         <Col span={12}>
                             <Players
                                 players={this.state.players}
-                                deadPlayers={this.state.deadPlayers} />
+                                />
                         </Col>
                     </Row>
                 </div>
