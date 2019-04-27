@@ -55,9 +55,6 @@ class App extends Component {
             key: uuid.v1(),
         }
     }
-    
-    
-    // window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
 
     getAlivePlayers = () => this.state.players.filter(player => player.health > player.deaths);
 
@@ -98,8 +95,7 @@ class App extends Component {
 
         setTimeout(() => {
             let index = this.state.currentSlide;
-            let players = this.state.players;
-            let player = players[index];
+            let player = this.state.players[index];
 
             player.deaths++;
 
@@ -107,26 +103,25 @@ class App extends Component {
             log.push({ log: player.name + " lost a life. Lives: " + player.health + ", deaths: " + player.deaths, key: uuid.v1() });
 
             this.setState({
-                players,
                 log,
             });
 
             setTimeout(() => {
-                this.carousel.nextSlide();
-                setTimeout(() => {
-                    let alivePlayers = this.getAlivePlayers();
-                    if (alivePlayers.length > 1) {
-                        this.start();
-                    } else {
+                let alivePlayers = this.getAlivePlayers();
+                if (alivePlayers.length > 1) {
+                    this.start();
+                } else {
+                    this.carousel.nextSlide();
+                    setTimeout(() => {
                         let log = this.state.log;
                         log.push({ log: alivePlayers[0].name + " won!", key: uuid.v1() });
                         this.setState({
                             log,
-                            alivePlayers,
+                            running: false,
                         });
                         ReactAI.ai().flush();
-                    }
-                }, 1000);
+                    }, 1000)
+                }
             }, 2000);
 
         }, 1000);
