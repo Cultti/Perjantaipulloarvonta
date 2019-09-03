@@ -3,7 +3,7 @@ import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
-import ReactAI from 'react-appinsights';
+import { AppInsights } from './Helpers';
 import GHCorner from 'react-gh-corner';
 
 class App extends Component {
@@ -19,6 +19,8 @@ class App extends Component {
         this.carousel = React.createRef();
         this.carouselInterval = 0;
 
+        this.appInsights = new AppInsights().getInstance();
+
         this.state = this.getDefaultState();
     }
 
@@ -27,25 +29,53 @@ class App extends Component {
         settingsVisible: false,
         currentSlide: 0,
         players: this.getPlayers(),
-        deadPlayers: [],
+        alivePlayers: this.getPlayers(),
+        winner: false,
         log: [],
     });
 
-    getPlayers = () => window.localStorage['players'] ? JSON.parse(window.localStorage['players']) : this.players;
+    getPlayers = () => {
+        let players;
+        if (window.localStorage['players']) {
+            players = JSON.parse(window.localStorage['players']);
+        } else {
+            players = this.players;
+        }
+
+        return players.map(player => {
+            return {
+                ...player,
+                deaths: 0,
+            };
+        });
+    }
+
+    getEmptyPlayer = (name) => {
+        return {
+            name,
+            health: 1,
+            deaths: 0,
+            key: uuid.v1(),
+        }
+    }
+
+    getAlivePlayers = () => this.state.players.filter(player => player.health > player.deaths);
 
     reset = () => {
         this.setState(this.getDefaultState());
     }
 
     start = () => {
-        if (this.state.players.length === 1) {
+        if (this.getAlivePlayers().length === 1) {
             return;
         }
 
         let length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
-            this.carousel.nextSlide();
+            if (this.getRandom() % 100 > 5) {
+                this.carousel.nextSlide();
+            }
         }, 300);
 
         this.setState({
@@ -70,46 +100,38 @@ class App extends Component {
 
         setTimeout(() => {
             let index = this.state.currentSlide;
-            let players = this.state.players;
-            let player = players[index];
+            let player = this.state.alivePlayers[index];
 
             player.deaths++;
 
             let log = this.state.log;
             log.push({ log: player.name + " lost a life. Lives: " + player.health + ", deaths: " + player.deaths, key: uuid.v1() });
-            let deadPlayers = this.state.deadPlayers;
-            if (player.health === player.deaths) {
-                deadPlayers.push(player);
-            }
 
             this.setState({
-                players,
                 log,
-                deadPlayers,
             });
 
             setTimeout(() => {
-                this.carousel.nextSlide();
-                setTimeout(() => {
-                    let cleanPlayers = this.cleanPlayers();
-                    if (cleanPlayers.length > 1) {
-                        this.start();
-                    } else {
+                let alivePlayers = this.getAlivePlayers();
+                if (alivePlayers.length > 1) {
+                    this.start();
+                } else {
+                    this.carousel.nextSlide();
+                    setTimeout(() => {
                         let log = this.state.log;
-                        log.push({ log: cleanPlayers[0].name + " won!", key: uuid.v1() });
+                        log.push({ log: alivePlayers[0].name + " won!", key: uuid.v1() });
                         this.setState({
-                            players: cleanPlayers,
                             log,
+                            running: false,
+                            winner: true,
                         });
-                        ReactAI.ai().flush();
-                    }
-                }, 1000);
+                        this.appInsights.flush();
+                    }, 1000)
+                }
             }, 2000);
 
         }, 1000);
     }
-
-    cleanPlayers = () => this.state.players.filter(player => player.health !== player.deaths);
 
     savePlayers = () => window.localStorage['players'] = JSON.stringify(this.state.players);
 
@@ -131,9 +153,22 @@ class App extends Component {
             currentSlide: newSlide
         });
 
+        if (newSlide === 1) {
+            let player = this.state.alivePlayers[0];
+            if (player.health <= player.deaths) {
+                let alivePlayers = this.state.alivePlayers;
+
+                alivePlayers[0] = alivePlayers[1];
+
+                this.setState({
+                    alivePlayers
+                });
+            }
+        }
+
         if (newSlide === 0) {
             this.setState({
-                players: this.cleanPlayers(),
+                alivePlayers: this.getAlivePlayers(),
             });
         }
     }
@@ -144,6 +179,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handleDeletePlayer = (index) => {
@@ -152,6 +188,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handlePlayerNameChange = (index, name) => {
@@ -160,6 +197,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     handlePlayerHealthChange = (index, value) => {
@@ -168,6 +206,7 @@ class App extends Component {
         this.setState({
             players,
         });
+        this.savePlayers();
     }
 
     render() {
@@ -182,12 +221,11 @@ class App extends Component {
                     bgColor="#000000"
                     openInNewTab={true}
                 />
-                <Header
-                    settingsClick={this.openSettings}
-                />
+                <Header />
                 <Carousel
                     ref={node => (this.carousel = node)}
-                    players={this.state.players}
+                    players={this.state.alivePlayers}
+                    winner={this.state.winner}
                     slideChange={this.handleSlideChange}
                 />
                 <Settings
@@ -204,7 +242,10 @@ class App extends Component {
                     <Button className="button" onClick={this.start} disabled={this.state.running} size="large" type="primary">
                         Start
                     </Button>
-                    <Button className="button" onClick={this.reset} disabled={this.state.running && this.state.players.length !== 1} size="large" type="danger">
+                    <Button className="button" onClick={this.openSettings} disabled={this.state.running} size="large">
+                        Settings
+                    </Button>
+                    <Button className="button" onClick={this.reset} disabled={this.state.running} size="large" type="danger">
                         Reset
                     </Button>
                 </div>
@@ -216,7 +257,7 @@ class App extends Component {
                         <Col span={12}>
                             <Players
                                 players={this.state.players}
-                                deadPlayers={this.state.deadPlayers} />
+                                />
                         </Col>
                     </Row>
                 </div>
@@ -225,4 +266,4 @@ class App extends Component {
     }
 }
 
-export default ReactAI.withTracking(App);
+export default App;

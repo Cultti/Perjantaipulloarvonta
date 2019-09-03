@@ -5,26 +5,14 @@ import './Players.scss';
 
 class Players extends Component {
     render() {
-        let allPlayers = [];
-        if (this.props.players !== undefined && this.props.deadPlayers !== undefined) {
-            let players;
-            if (this.props.deadPlayers.length > 0) {
-                players = this.props.players.filter(player => !this.props.deadPlayers.some(dead => dead.key === player.key));
-            } else {
-                players = this.props.players;
-            }
-            allPlayers = players
-                .concat(this.props.deadPlayers)
-                .sort((a, b) => a.name === b.name ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1);
-        }
-
+        let alive = this.props.players.filter(player => player.health > player.deaths);
         return (
             <List
-                header={<div>Players - Alive {this.props.players.length}/{allPlayers.length}</div>}
+                header={<div>Players - Alive {alive.length}/{this.props.players.length}</div>}
                 bordered
-                dataSource={allPlayers.reverse()}
+                dataSource={this.props.players}
                 rowKey={player => player.key}
-                renderItem={player => <List.Item><PlayerItem {...player} /></List.Item>}
+                renderItem={player => <List.Item><PlayerItem targetKey={player.key} {...player} /></List.Item>}
             />
         );
     }
