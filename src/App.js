@@ -70,6 +70,8 @@ class App extends Component {
             return;
         }
 
+        window.scrollTo(0, 0);
+
         let length = this.getRandom() % this.state.players.length * 300 * 2 + 5000;
 
         this.carouselInterval = setInterval(() => {
