@@ -100,7 +100,7 @@ class App extends Component {
 
         setTimeout(() => {
             let index = this.state.currentSlide;
-            let player = this.state.players[index];
+            let player = this.state.alivePlayers[index];
 
             player.deaths++;
 
@@ -208,9 +208,7 @@ class App extends Component {
                     bgColor="#000000"
                     openInNewTab={true}
                 />
-                <Header
-                    settingsClick={this.openSettings}
-                />
+                <Header />
                 <Carousel
                     ref={node => (this.carousel = node)}
                     players={this.state.alivePlayers}
@@ -230,6 +228,9 @@ class App extends Component {
                 <div className="button-group">
                     <Button className="button" onClick={this.start} disabled={this.state.running} size="large" type="primary">
                         Start
+                    </Button>
+                    <Button className="button" onClick={this.openSettings} disabled={this.state.running} size="large">
+                        Settings
                     </Button>
                     <Button className="button" onClick={this.reset} disabled={this.state.running} size="large" type="danger">
                         Reset
