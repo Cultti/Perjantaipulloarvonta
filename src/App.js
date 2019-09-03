@@ -153,6 +153,19 @@ class App extends Component {
             currentSlide: newSlide
         });
 
+        if (newSlide === 1) {
+            let player = this.state.alivePlayers[0];
+            if (player.health <= player.deaths) {
+                let alivePlayers = this.state.alivePlayers;
+
+                alivePlayers[0] = alivePlayers[1];
+
+                this.setState({
+                    alivePlayers
+                });
+            }
+        }
+
         if (newSlide === 0) {
             this.setState({
                 alivePlayers: this.getAlivePlayers(),
