@@ -3,7 +3,7 @@ import './App.scss';
 import { Carousel, Header, Log, Settings, Players } from './Components';
 import { Button, Row, Col } from 'antd';
 import * as uuid from 'uuid';
-import ReactAI from 'react-appinsights';
+import { AppInsights } from './Helpers';
 import GHCorner from 'react-gh-corner';
 
 class App extends Component {
@@ -18,6 +18,8 @@ class App extends Component {
 
         this.carousel = React.createRef();
         this.carouselInterval = 0;
+
+        this.appInsights = new AppInsights().getInstance();
 
         this.state = this.getDefaultState();
     }
@@ -123,7 +125,7 @@ class App extends Component {
                             running: false,
                             winner: true,
                         });
-                        ReactAI.ai().flush();
+                        this.appInsights.flush();
                     }, 1000)
                 }
             }, 2000);
@@ -250,4 +252,4 @@ class App extends Component {
     }
 }
 
-export default ReactAI.withTracking(App);
+export default App;

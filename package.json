@@ -3,13 +3,13 @@
     "version": "1.2.2",
     "private": true,
     "dependencies": {
+        "@microsoft/applicationinsights-web": "^2.2.0",
         "antd": "^3.15.0",
-        "node-sass": "^4.11.0",
+        "node-sass": "^4.12.0",
         "react": "^16.8.4",
-        "react-appinsights": "^2.0.2",
         "react-dom": "^16.8.4",
         "react-gh-corner": "^1.1.2",
-        "react-scripts": "2.1.8",
+        "react-scripts": "3.1.1",
         "styled-components": "^4.2.0",
         "uuid": "^3.3.2"
     },
