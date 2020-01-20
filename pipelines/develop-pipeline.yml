@@ -1,0 +1,11 @@
+trigger:
+- develop
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# Artifact infrastructure as code
+- publish: $(System.DefaultWorkingDirectory)/infrastructure/
+  displayName: 'Infrastructure: Artifact'
+  artifact: infrastructure
