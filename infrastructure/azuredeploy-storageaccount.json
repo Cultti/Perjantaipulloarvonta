@@ -23,5 +23,11 @@
             },
             "kind": "StorageV2"
         }
-    ]
+    ],
+    "outputs": {
+        "storageAccountName": {
+            "value": "[concat('storperjantaipullo', parameters('environment'))]",
+            "type": "string"
+        }
+    }
 }
