@@ -3,9 +3,49 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+  demands: npm
 
 steps:
 # Artifact infrastructure as code
 - publish: $(System.DefaultWorkingDirectory)/infrastructure/
   displayName: 'Infrastructure: Artifact'
+  artifact: infrastructure
+
+# Build app
+- task: OneLuckiDev.json2variable.vsts-release-web-test.oneLuckiDevJson2Variable@1
+  displayName: 'Build app: Load package.json'
+  inputs:
+    jsonFile: '$(Build.SourcesDirectory)/package.json'
+    variablePrefix: package
+ 
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Build app: Replace tokens in .env'
+  inputs:
+    targetFiles: $(Build.SourcesDirectory)/.env
+    escapeType: none
+    actionOnMissing: fail
+
+- task: Npm@0
+  displayName: 'Build app: npm install'
+  inputs:
+    cwd: $(Build.SourcesDirectory)
+    arguments: '--force'
+
+- task: Npm@1
+  displayName: 'Build app: npm run build'
+  inputs:
+    command: custom
+    workingDir: $(Build.SourcesDirectory)
+    verbose: false
+    customCommand: 'run build'
+
+- task: CopyFiles@2
+  displayName: 'Build app: Copy web.config'
+  inputs:
+    SourceFolder: $(Build.SourcesDirectory)
+    Contents: web.config
+    TargetFolder: $(Build.SourcesDirectory)/build/
+
+- publish: $(System.DefaultWorkingDirectory)/build/
+  displayName: 'Build app: Artifact'
   artifact: infrastructure
