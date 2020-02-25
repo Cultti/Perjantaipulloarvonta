@@ -31,24 +31,24 @@ steps:
 - task: Npm@0
   displayName: 'Build app: npm install'
   inputs:
-    cwd: $(Build.SourcesDirectory)
+    cwd: .
     arguments: '--force'
 
 - task: Npm@1
   displayName: 'Build app: npm run build'
   inputs:
     command: custom
-    workingDir: $(Build.SourcesDirectory)
+    workingDir: .
     verbose: false
     customCommand: 'run build'
 
 - task: CopyFiles@2
   displayName: 'Build app: Copy web.config'
   inputs:
-    SourceFolder: $(Build.SourcesDirectory)
+    SourceFolder: .
     Contents: web.config
-    TargetFolder: $(Build.SourcesDirectory)/build/
+    TargetFolder: ./build/
 
-- publish: $(System.DefaultWorkingDirectory)/build/
+- publish: ./build/
   displayName: 'Build app: Artifact'
   artifact: infrastructure
