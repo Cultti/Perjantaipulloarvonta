@@ -32,7 +32,6 @@ steps:
   displayName: 'Build app: npm install'
   inputs:
     cwd: .
-    arguments: '--force'
 
 - task: Npm@1
   displayName: 'Build app: npm run build'
