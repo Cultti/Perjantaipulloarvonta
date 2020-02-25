@@ -5,6 +5,9 @@ pool:
   vmImage: 'ubuntu-latest'
   demands: npm
 
+variables:
+  INSTRUMENTATION_KEY: '9b8d1e19-7555-4c84-8480-0e804d465191'
+
 steps:
 # Artifact infrastructure as code
 - publish: $(System.DefaultWorkingDirectory)/infrastructure/
